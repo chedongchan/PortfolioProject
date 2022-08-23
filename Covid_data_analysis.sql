@@ -5,16 +5,18 @@ Skills used: Joins, CTE's, Temp Tables, Windows Functions, Aggregate Functions, 
 
 /* CREATE database then import data using either the import wizrd or code below. */
 
-/* Check a table is made.. with some parameters*/
+/* Check a table is made.. with select parameters*/
 Select *
 From covid_data.covid_deaths
 Where continent is not null 
 order by 3,4;
+
+
 /* Check again for the second table, if it is made.. and pull up table with some parameters applied*/
 
 SELECT * FROM covid_vaccinations WHERE continent = '' AND location LIKE '%a';
 
-/* Population and Total Vaccinations of each Continent. Need to join the two relevant tables by matching location and date */
+/* Population and Total Vaccinations of each Continent. Join two relevant tables by matching location and date */
 
 Select dea.continent, dea.location, dea.date as date,  dea.population, CAST(vac.total_vaccinations as SIGNED)
 	FROM covid_deaths dea
@@ -36,7 +38,7 @@ New_vaccinations INT,
 RollingPeopleVaccinated INT
 );
 
-/* insert data into new table *  + Also need to change data type to date for the date field */
+/* insert data into new table *  + Change data type to date for the date field */
 Insert into PercentPopulationVaccinated
 Select dea.continent, dea.location, str_to_date(dea.date, '%d/%m/%Y'), CAST(dea.population as SIGNED), CAST(vac.new_vaccinations as SIGNED), CAST(vac.total_vaccinations as SIGNED)
 From covid_deaths dea
